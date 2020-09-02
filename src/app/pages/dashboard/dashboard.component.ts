@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import Chart from 'chart.js';
 import * as XLSX from 'xlsx';
-import * as FileSaver from 'file-saver';
 
 @Component({
   selector: "app-dashboard",
@@ -18,38 +17,9 @@ export class DashboardComponent implements OnInit {
   public clicked2: boolean = false;
 
   title = 'read-excel-in-angular8';
-  storeData: any;
-  csvData: any;
-  jsonData: any;
-  textData: any;
-  htmlData: any;
-  fileUploaded: File;
-  worksheet: any;
-
   exceltoJson = {};
 
   constructor() {}
-
-  /*uploadedFile(event) {
-    this.fileUploaded = event.target.files[0];
-    this.readExcel();
-  }
-*/
- /* readExcel() {
-    let readFile = new FileReader();
-    readFile.onload = (e) => {
-      this.storeData = readFile.result;
-      var data = new Uint8Array(this.storeData);
-      var arr = new Array();
-      for (var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
-      var bstr = arr.join("");
-      var workbook = XLSX.read(bstr, { type: "binary" });
-      var first_sheet_name = workbook.SheetNames[0];
-      this.worksheet = workbook.Sheets[first_sheet_name];
-    }
-    readFile.readAsArrayBuffer(this.fileUploaded);
-  }
-*/
 
 
   onFileChange(event: any) {
@@ -68,7 +38,7 @@ export class DashboardComponent implements OnInit {
       /* create workbook */
       const binarystr: string = e.target.result;
       const wb: XLSX.WorkBook = XLSX.read(binarystr, { type: 'binary' });
-      for (var i = 0; i < wb.SheetNames.length; ++i) {
+      for (let i = 0; i < wb.SheetNames.length; ++i) {
         const wsname: string = wb.SheetNames[i];
         const ws: XLSX.WorkSheet = wb.Sheets[wsname];
         const data = XLSX.utils.sheet_to_json(ws); // to get 2d array pass 2nd parameter as object {header: 1}
@@ -78,19 +48,20 @@ export class DashboardComponent implements OnInit {
         //  console.log("json",headers)
       }
       this.exceltoJson['headers'] = headerJson;
-      console.log(this.exceltoJson);
+      // console.log(this.exceltoJson);
+      this.loadDataFromExcelFile(this.exceltoJson);
     };
   }
 
   get_header_row(sheet) {
-    var headers = [];
-    var range = XLSX.utils.decode_range(sheet['!ref']);
-    var C, R = range.s.r; /* start in the first row */
+    let headers = [];
+    let range = XLSX.utils.decode_range(sheet['!ref']);
+    let C, R = range.s.r; /* start in the first row */
     /* walk every column in the range */
     for (C = range.s.c; C <= range.e.c; ++C) {
-      var cell = sheet[XLSX.utils.encode_cell({ c: C, r: R })] /* find the cell in the first row */
+      let cell = sheet[XLSX.utils.encode_cell({ c: C, r: R })] /* find the cell in the first row */
       // console.log("cell",cell)
-      var hdr = "UNKNOWN " + C; // <-- replace with your desired default
+      let hdr = "UNKNOWN " + C; // <-- replace with your desired default
       if (cell && cell.t) {
         hdr = XLSX.utils.format_cell(cell);
         headers.push(hdr);
@@ -100,11 +71,13 @@ export class DashboardComponent implements OnInit {
   }
 
 
-
+  loadDataFromExcelFile(file: any) {
+    console.log("file", file)
+  }
 
 
   ngOnInit() {
-    var gradientChartOptionsConfigurationWithTooltipBlue: any = {
+    let gradientChartOptionsConfigurationWithTooltipBlue: any = {
       maintainAspectRatio: false,
       legend: {
         display: false
@@ -152,7 +125,7 @@ export class DashboardComponent implements OnInit {
       }
     };
 
-    var gradientChartOptionsConfigurationWithTooltipPurple: any = {
+    let gradientChartOptionsConfigurationWithTooltipPurple: any = {
       maintainAspectRatio: false,
       legend: {
         display: false
@@ -200,7 +173,7 @@ export class DashboardComponent implements OnInit {
       }
     };
 
-    var gradientChartOptionsConfigurationWithTooltipRed: any = {
+    let gradientChartOptionsConfigurationWithTooltipRed: any = {
       maintainAspectRatio: false,
       legend: {
         display: false
@@ -248,7 +221,7 @@ export class DashboardComponent implements OnInit {
       }
     };
 
-    var gradientChartOptionsConfigurationWithTooltipOrange: any = {
+    let gradientChartOptionsConfigurationWithTooltipOrange: any = {
       maintainAspectRatio: false,
       legend: {
         display: false
@@ -296,7 +269,7 @@ export class DashboardComponent implements OnInit {
       }
     };
 
-    var gradientChartOptionsConfigurationWithTooltipGreen: any = {
+    let gradientChartOptionsConfigurationWithTooltipGreen: any = {
       maintainAspectRatio: false,
       legend: {
         display: false
@@ -345,7 +318,7 @@ export class DashboardComponent implements OnInit {
     };
 
 
-    var gradientBarChartConfiguration: any = {
+    let gradientBarChartConfiguration: any = {
       maintainAspectRatio: false,
       legend: {
         display: false
@@ -396,13 +369,13 @@ export class DashboardComponent implements OnInit {
     this.canvas = document.getElementById("chartLineRed");
     this.ctx = this.canvas.getContext("2d");
 
-    var gradientStroke = this.ctx.createLinearGradient(0, 230, 0, 50);
+    let gradientStroke = this.ctx.createLinearGradient(0, 230, 0, 50);
 
     gradientStroke.addColorStop(1, 'rgba(233,32,16,0.2)');
     gradientStroke.addColorStop(0.4, 'rgba(233,32,16,0.0)');
     gradientStroke.addColorStop(0, 'rgba(233,32,16,0)'); //red colors
 
-    var data = {
+    let data = {
       labels: ['JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
       datasets: [{
         label: "Data",
@@ -423,7 +396,7 @@ export class DashboardComponent implements OnInit {
       }]
     };
 
-    var myChart = new Chart(this.ctx, {
+    let myChart = new Chart(this.ctx, {
       type: 'line',
       data: data,
       options: gradientChartOptionsConfigurationWithTooltipRed
@@ -434,13 +407,13 @@ export class DashboardComponent implements OnInit {
     this.ctx = this.canvas.getContext("2d");
 
 
-    var gradientStroke = this.ctx.createLinearGradient(0, 230, 0, 50);
+    let gradientStroke = this.ctx.createLinearGradient(0, 230, 0, 50);
 
     gradientStroke.addColorStop(1, 'rgba(66,134,121,0.15)');
     gradientStroke.addColorStop(0.4, 'rgba(66,134,121,0.0)'); //green colors
     gradientStroke.addColorStop(0, 'rgba(66,134,121,0)'); //green colors
 
-    var data = {
+    let data = {
       labels: ['JUL', 'AUG', 'SEP', 'OCT', 'NOV'],
       datasets: [{
         label: "My First dataset",
@@ -461,7 +434,7 @@ export class DashboardComponent implements OnInit {
       }]
     };
 
-    var myChart = new Chart(this.ctx, {
+    let myChart = new Chart(this.ctx, {
       type: 'line',
       data: data,
       options: gradientChartOptionsConfigurationWithTooltipGreen
@@ -470,7 +443,7 @@ export class DashboardComponent implements OnInit {
 
 
 
-    var chart_labels = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+    let chart_labels = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
     this.datasets = [
       [100, 70, 90, 70, 85, 60, 75, 60, 90, 80, 110, 100],
       [80, 120, 105, 110, 95, 105, 90, 100, 80, 95, 70, 120],
@@ -483,13 +456,13 @@ export class DashboardComponent implements OnInit {
     this.canvas = document.getElementById("chartBig1");
     this.ctx = this.canvas.getContext("2d");
 
-    var gradientStroke = this.ctx.createLinearGradient(0, 230, 0, 50);
+    let gradientStroke = this.ctx.createLinearGradient(0, 230, 0, 50);
 
     gradientStroke.addColorStop(1, 'rgba(233,32,16,0.2)');
     gradientStroke.addColorStop(0.4, 'rgba(233,32,16,0.0)');
     gradientStroke.addColorStop(0, 'rgba(233,32,16,0)'); //red colors
 
-    var config = {
+    let config = {
       type: 'line',
       data: {
         labels: chart_labels,
@@ -518,14 +491,14 @@ export class DashboardComponent implements OnInit {
 
     this.canvas = document.getElementById("CountryChart");
     this.ctx  = this.canvas.getContext("2d");
-    var gradientStroke = this.ctx.createLinearGradient(0, 230, 0, 50);
+    let gradientStroke = this.ctx.createLinearGradient(0, 230, 0, 50);
 
     gradientStroke.addColorStop(1, 'rgba(29,140,248,0.2)');
     gradientStroke.addColorStop(0.4, 'rgba(29,140,248,0.0)');
     gradientStroke.addColorStop(0, 'rgba(29,140,248,0)'); //blue colors
 
 
-    var myChart = new Chart(this.ctx, {
+    let myChart = new Chart(this.ctx, {
       type: 'bar',
       responsive: true,
       legend: {
