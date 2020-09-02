@@ -1,0 +1,2 @@
+# magistarski
+magistarski
