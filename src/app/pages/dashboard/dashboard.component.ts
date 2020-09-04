@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import Chart from 'chart.js';
 import * as XLSX from 'xlsx';
+import * as _ from "lodash";
 
 @Component({
   selector: "app-dashboard",
@@ -12,14 +13,127 @@ export class DashboardComponent implements OnInit {
   public datasets: any;
   public data: any;
   public myChartData;
+  public sheet1 = [];
+  public data1 = [];
+  public data2 = [];
+  public sheet2 = [];
   public clicked: boolean = true;
   public clicked1: boolean = false;
   public clicked2: boolean = false;
+  public active = 1;
+  public pokazatelji2 = [];
+  public pokazatelji1 = [
+    {
+      opis: 'Koeficijent tekuće likvidnosti',
+      godina2018: null,
+      godina2019: null
+    },
+    {
+      opis: 'Koeficijent ubrzane likvidnosti',
+      godina2018: null,
+      godina2019: null
+    },
+    {
+      opis: 'Koeficijent trenutne likvidnosti',
+      godina2018: null,
+      godina2019: null
+    },
+    {
+      opis: 'Koeficijent finansijske stabilnosti',
+      godina2018: null,
+      godina2019: null
+    },
+    {
+      opis: 'Ekonomičnost ukupnog poslovanja',
+      godina2018: null,
+      godina2019: null
+    },
+    {
+      opis: 'Odnos ukupnog prihoda i troška zaposlenih',
+      godina2018: null,
+      godina2019: null
+    },
+    {
+      opis: 'Ekonomičnost finansiranja',
+      godina2018: null,
+      godina2019: null
+    },
+    {
+      opis: 'Rentabilnost (profitabilnost) kapitala (ROE)',
+      godina2018: null,
+      godina2019: null
+    },
+    {
+      opis: 'Rentabilnost (profitabilnost) imovine (ROA)',
+      godina2018: null,
+      godina2019: null
+    },
+    {
+      opis: 'Pokazatelj zaduženosti',
+      godina2018: null,
+      godina2019: null
+    },
+    {
+      opis: 'Koeficijent vlastitog finansiranja',
+      godina2018: null,
+      godina2019: null
+    },
+    {
+      opis: 'Odnos duga i kapitala',
+      godina2018: null,
+      godina2019: null
+    },
+    {
+      opis: 'Koeficijent obrta potraživanja',
+      godina2018: null,
+      godina2019: null
+    },
+    {
+      opis: 'Trajanje naplate potraživanja u danima',
+      godina2018: null,
+      godina2019: null
+    },
+    {
+      opis: 'Koeficijent obrta ukupne imovine',
+      godina2018: null,
+      godina2019: null
+    },
+    {
+      opis: 'Dani vezivanja ukupne imovine',
+      godina2018: null,
+      godina2019: null
+    },
+    {
+      opis: 'Koeficijent obrta kratkotrajne imovine',
+      godina2018: null,
+      godina2019: null
+    },
+    {
+      opis: 'Dani vezivanja kratkotrajne imovine',
+      godina2018: null,
+      godina2019: null
+    },
+    {
+      opis: 'Koeficijent obrta zaliha',
+      godina2018: null,
+      godina2019: null
+    }
+,
+    {
+      opis: 'Dani vezivanja zaliha',
+      godina2018: null,
+      godina2019: null
+    }
+
+
+  ];
 
   title = 'read-excel-in-angular8';
   exceltoJson = {};
 
-  constructor() {}
+  constructor() {
+    this.pokazatelji2 = _.cloneDeep(this.pokazatelji1);
+  }
 
 
   onFileChange(event: any) {
@@ -72,7 +186,186 @@ export class DashboardComponent implements OnInit {
 
 
   loadDataFromExcelFile(file: any) {
-    console.log("file", file)
+    console.log("file", file);
+    this.sheet1 = file.sheet1;
+    this.sheet2 = file.sheet2;
+
+    this.sheet1.forEach((item: any) => {
+      this.data1.push({
+        opis: item.opis,
+        godina2018: item.godina2018 ? item.godina2018 : '',
+        godina2019: item.godina2019 ? item.godina2019 : ''
+      })
+    });
+
+    this.sheet2.forEach((item: any) => {
+      this.data2.push({
+        opis: item.opis,
+        godina2018: item.godina2018 ? item.godina2018 : '',
+        godina2019: item.godina2019 ? item.godina2019 : ''
+      })
+    });
+  }
+
+  calculate1() {
+    /*POKAZATELJI LIKVIDNOSTI*/
+    this.pokazatelji1.find(x => x.opis === 'Koeficijent tekuće likvidnosti').godina2018 = this.sheet1.find(x => x.opis === 'kratkorocna_aktiva').godina2018 / this.sheet1.find(x => x.opis === 'kratkorocna_pasiva').godina2018;
+    this.pokazatelji1.find(x => x.opis === 'Koeficijent tekuće likvidnosti').godina2019 = this.sheet1.find(x => x.opis === 'kratkorocna_aktiva').godina2019 / this.sheet1.find(x => x.opis === 'kratkorocna_pasiva').godina2019;
+
+    this.pokazatelji1.find(x => x.opis === 'Koeficijent ubrzane likvidnosti').godina2018 = (this.sheet1.find(x => x.opis === 'kratkorocna_aktiva').godina2018 - this.sheet1.find(x => x.opis === 'zalihe_i_sredstva_namjenjena_prodaji').godina2018) / this.sheet1.find(x => x.opis === 'kratkorocna_pasiva').godina2018;
+    this.pokazatelji1.find(x => x.opis === 'Koeficijent ubrzane likvidnosti').godina2019 = (this.sheet1.find(x => x.opis === 'kratkorocna_aktiva').godina2019 - this.sheet1.find(x => x.opis === 'zalihe_i_sredstva_namjenjena_prodaji').godina2019) / this.sheet1.find(x => x.opis === 'kratkorocna_pasiva').godina2019;
+
+    this.pokazatelji1.find(x => x.opis === 'Koeficijent trenutne likvidnosti').godina2018 = (this.sheet1.find(x => x.opis === 'gotovina').godina2018 + this.sheet1.find(x => x.opis === 'gotovinski_ekvivalenti').godina2018) / this.sheet1.find(x => x.opis === 'kratkorocna_pasiva').godina2018;
+    this.pokazatelji1.find(x => x.opis === 'Koeficijent trenutne likvidnosti').godina2019 = (this.sheet1.find(x => x.opis === 'gotovina').godina2019 + this.sheet1.find(x => x.opis === 'gotovinski_ekvivalenti').godina2019) / this.sheet1.find(x => x.opis === 'kratkorocna_pasiva').godina2019;
+
+    this.pokazatelji1.find(x => x.opis === 'Koeficijent finansijske stabilnosti').godina2018 = this.sheet1.find(x => x.opis === 'dugotrajna_imovina').godina2018 / (this.sheet1.find(x => x.opis === 'dugorocne_obaveze').godina2018 + this.sheet1.find(x => x.opis === 'kapital').godina2018);
+    this.pokazatelji1.find(x => x.opis === 'Koeficijent finansijske stabilnosti').godina2019 = this.sheet1.find(x => x.opis === 'dugotrajna_imovina').godina2019 / (this.sheet1.find(x => x.opis === 'dugorocne_obaveze').godina2019 + this.sheet1.find(x => x.opis === 'kapital').godina2019);
+
+
+    /*POKAZATELJI EKONOMICNOSTI*/
+
+    this.pokazatelji1.find(x => x.opis === 'Ekonomičnost ukupnog poslovanja').godina2018 = this.sheet1.find(x => x.opis === 'ukupni_prihodi').godina2018 / this.sheet1.find(x => x.opis === 'ukupni_rashodi').godina2018;
+    this.pokazatelji1.find(x => x.opis === 'Ekonomičnost ukupnog poslovanja').godina2019 = this.sheet1.find(x => x.opis === 'ukupni_prihodi').godina2019 / this.sheet1.find(x => x.opis === 'ukupni_rashodi').godina2019;
+
+    this.pokazatelji1.find(x => x.opis === 'Odnos ukupnog prihoda i troška zaposlenih').godina2018 = this.sheet1.find(x => x.opis === 'ukupni_prihodi').godina2018 / this.sheet1.find(x => x.opis === 'trosak_zaposlenih').godina2018;
+    this.pokazatelji1.find(x => x.opis === 'Odnos ukupnog prihoda i troška zaposlenih').godina2019 = this.sheet1.find(x => x.opis === 'ukupni_prihodi').godina2019 / this.sheet1.find(x => x.opis === 'trosak_zaposlenih').godina2019;
+
+    this.pokazatelji1.find(x => x.opis === 'Ekonomičnost finansiranja').godina2018 = this.sheet1.find(x => x.opis === 'finansijski_prihodi').godina2018 / this.sheet1.find(x => x.opis === 'finansijski_rashodi').godina2018;
+    this.pokazatelji1.find(x => x.opis === 'Ekonomičnost finansiranja').godina2019 = this.sheet1.find(x => x.opis === 'finansijski_prihodi').godina2019 / this.sheet1.find(x => x.opis === 'finansijski_rashodi').godina2019;
+
+    /*POKAZATELJI RENTABILNOSTI*/
+
+    this.pokazatelji1.find(x => x.opis === 'Rentabilnost (profitabilnost) kapitala (ROE)').godina2018 = this.sheet1.find(x => x.opis === 'neto_dobit').godina2018 / this.sheet1.find(x => x.opis === 'kapital').godina2018;
+    this.pokazatelji1.find(x => x.opis === 'Rentabilnost (profitabilnost) kapitala (ROE)').godina2019 = this.sheet1.find(x => x.opis === 'neto_dobit').godina2019 / this.sheet1.find(x => x.opis === 'kapital').godina2019;
+
+    this.pokazatelji1.find(x => x.opis === 'Rentabilnost (profitabilnost) imovine (ROA)').godina2018 = this.sheet1.find(x => x.opis === 'dobit_prije_poreza').godina2018 / this.sheet1.find(x => x.opis === 'ukupna_aktiva').godina2018;
+    this.pokazatelji1.find(x => x.opis === 'Rentabilnost (profitabilnost) imovine (ROA)').godina2019 = this.sheet1.find(x => x.opis === 'dobit_prije_poreza').godina2019 / this.sheet1.find(x => x.opis === 'ukupna_aktiva').godina2019;
+
+    /*POKAZATELJI ZADUZENOSTI*/
+
+    this.pokazatelji1.find(x => x.opis === 'Pokazatelj zaduženosti').godina2018 = this.sheet1.find(x => x.opis === 'ukupne_obaveze').godina2018 / this.sheet1.find(x => x.opis === 'ukupna_aktiva').godina2018;
+    this.pokazatelji1.find(x => x.opis === 'Pokazatelj zaduženosti').godina2019 = this.sheet1.find(x => x.opis === 'ukupne_obaveze').godina2019 / this.sheet1.find(x => x.opis === 'ukupna_aktiva').godina2019;
+
+    this.pokazatelji1.find(x => x.opis === 'Koeficijent vlastitog finansiranja').godina2018 = this.sheet1.find(x => x.opis === 'kapital').godina2018 / this.sheet1.find(x => x.opis === 'ukupna_aktiva').godina2018;
+    this.pokazatelji1.find(x => x.opis === 'Koeficijent vlastitog finansiranja').godina2019 = this.sheet1.find(x => x.opis === 'kapital').godina2019 / this.sheet1.find(x => x.opis === 'ukupna_aktiva').godina2019;
+
+    this.pokazatelji1.find(x => x.opis === 'Odnos duga i kapitala').godina2018 = this.sheet1.find(x => x.opis === 'ukupne_obaveze').godina2018 / this.sheet1.find(x => x.opis === 'kapital').godina2018;
+    this.pokazatelji1.find(x => x.opis === 'Odnos duga i kapitala').godina2019 = this.sheet1.find(x => x.opis === 'ukupne_obaveze').godina2019 / this.sheet1.find(x => x.opis === 'kapital').godina2019;
+
+    /*POKAZATELJI AKTIVNOSTI*/
+
+    this.pokazatelji1.find(x => x.opis === 'Koeficijent obrta potraživanja').godina2018 = (this.sheet1.find(x => x.opis === 'prihodi_od_prodaje_robe').godina2018 + this.sheet1.find(x => x.opis === 'prihodi_od_prodaje_ucinika').godina2018) / this.sheet1.find(x => x.opis === 'kupci').godina2018;
+    this.pokazatelji1.find(x => x.opis === 'Koeficijent obrta potraživanja').godina2019 = (this.sheet1.find(x => x.opis === 'prihodi_od_prodaje_robe').godina2019 + this.sheet1.find(x => x.opis === 'prihodi_od_prodaje_ucinika').godina2019) / this.sheet1.find(x => x.opis === 'kupci').godina2019;
+
+    this.pokazatelji1.find(x => x.opis === 'Trajanje naplate potraživanja u danima').godina2018 = 365 / this.pokazatelji1.find(x => x.opis === 'Koeficijent obrta potraživanja').godina2018;
+    this.pokazatelji1.find(x => x.opis === 'Trajanje naplate potraživanja u danima').godina2019 = 365 / this.pokazatelji1.find(x => x.opis === 'Koeficijent obrta potraživanja').godina2019;
+
+    this.pokazatelji1.find(x => x.opis === 'Koeficijent obrta ukupne imovine').godina2018 = this.sheet1.find(x => x.opis === 'ukupni_prihodi').godina2018 / this.sheet1.find(x => x.opis === 'ukupna_aktiva').godina2018;
+    this.pokazatelji1.find(x => x.opis === 'Koeficijent obrta ukupne imovine').godina2019 = this.sheet1.find(x => x.opis === 'ukupni_prihodi').godina2019 / this.sheet1.find(x => x.opis === 'ukupna_aktiva').godina2019;
+
+    this.pokazatelji1.find(x => x.opis === 'Dani vezivanja ukupne imovine').godina2018 = 365 / this.pokazatelji1.find(x => x.opis === 'Koeficijent obrta ukupne imovine').godina2018;
+    this.pokazatelji1.find(x => x.opis === 'Dani vezivanja ukupne imovine').godina2019 = 365 / this.pokazatelji1.find(x => x.opis === 'Koeficijent obrta ukupne imovine').godina2019;
+
+    this.pokazatelji1.find(x => x.opis === 'Koeficijent obrta kratkotrajne imovine').godina2018 = this.sheet1.find(x => x.opis === 'ukupni_prihodi').godina2018 / this.sheet1.find(x => x.opis === 'kratkorocna_aktiva').godina2018;
+    this.pokazatelji1.find(x => x.opis === 'Koeficijent obrta kratkotrajne imovine').godina2019 = this.sheet1.find(x => x.opis === 'ukupni_prihodi').godina2019 / this.sheet1.find(x => x.opis === 'kratkorocna_aktiva').godina2019;
+
+    this.pokazatelji1.find(x => x.opis === 'Dani vezivanja kratkotrajne imovine').godina2018 = 365 / this.pokazatelji1.find(x => x.opis === 'Koeficijent obrta kratkotrajne imovine').godina2018;
+    this.pokazatelji1.find(x => x.opis === 'Dani vezivanja kratkotrajne imovine').godina2019 = 365 / this.pokazatelji1.find(x => x.opis === 'Koeficijent obrta kratkotrajne imovine').godina2019;
+
+    this.pokazatelji1.find(x => x.opis === 'Koeficijent obrta zaliha').godina2018 = (this.sheet1.find(x => x.opis === 'prihodi_od_prodaje_robe').godina2018 + this.sheet1.find(x => x.opis === 'prihodi_od_prodaje_ucinika').godina2018) / this.sheet1.find(x => x.opis === 'zalihe_i_sredstva_namjenjena_prodaji').godina2018;
+    this.pokazatelji1.find(x => x.opis === 'Koeficijent obrta zaliha').godina2019 = (this.sheet1.find(x => x.opis === 'prihodi_od_prodaje_robe').godina2019 + this.sheet1.find(x => x.opis === 'prihodi_od_prodaje_ucinika').godina2019) / this.sheet1.find(x => x.opis === 'zalihe_i_sredstva_namjenjena_prodaji').godina2019;
+
+    this.pokazatelji1.find(x => x.opis === 'Dani vezivanja zaliha').godina2018 = 365 / this.pokazatelji1.find(x => x.opis === 'Koeficijent obrta zaliha').godina2018;
+    this.pokazatelji1.find(x => x.opis === 'Dani vezivanja zaliha').godina2019 = 365 / this.pokazatelji1.find(x => x.opis === 'Koeficijent obrta zaliha').godina2019;
+
+    this.pokazatelji1.forEach((item: any) => {
+      item.godina2018 = Math.round(item.godina2018 * 100) / 100;
+      item.godina2019 = Math.round(item.godina2019 * 100) / 100;
+    });
+
+  }
+
+
+  calculate2() {
+    /*POKAZATELJI LIKVIDNOSTI*/
+    this.pokazatelji2.find(x => x.opis === 'Koeficijent tekuće likvidnosti').godina2018 = this.sheet2.find(x => x.opis === 'kratkorocna_aktiva').godina2018 / this.sheet2.find(x => x.opis === 'kratkorocna_pasiva').godina2018;
+    this.pokazatelji2.find(x => x.opis === 'Koeficijent tekuće likvidnosti').godina2019 = this.sheet2.find(x => x.opis === 'kratkorocna_aktiva').godina2019 / this.sheet2.find(x => x.opis === 'kratkorocna_pasiva').godina2019;
+
+    this.pokazatelji2.find(x => x.opis === 'Koeficijent ubrzane likvidnosti').godina2018 = (this.sheet2.find(x => x.opis === 'kratkorocna_aktiva').godina2018 - this.sheet2.find(x => x.opis === 'zalihe_i_sredstva_namjenjena_prodaji').godina2018) / this.sheet2.find(x => x.opis === 'kratkorocna_pasiva').godina2018;
+    this.pokazatelji2.find(x => x.opis === 'Koeficijent ubrzane likvidnosti').godina2019 = (this.sheet2.find(x => x.opis === 'kratkorocna_aktiva').godina2019 - this.sheet2.find(x => x.opis === 'zalihe_i_sredstva_namjenjena_prodaji').godina2019) / this.sheet2.find(x => x.opis === 'kratkorocna_pasiva').godina2019;
+
+    this.pokazatelji2.find(x => x.opis === 'Koeficijent trenutne likvidnosti').godina2018 = (this.sheet2.find(x => x.opis === 'gotovina').godina2018 + this.sheet2.find(x => x.opis === 'gotovinski_ekvivalenti').godina2018) / this.sheet2.find(x => x.opis === 'kratkorocna_pasiva').godina2018;
+    this.pokazatelji2.find(x => x.opis === 'Koeficijent trenutne likvidnosti').godina2019 = (this.sheet2.find(x => x.opis === 'gotovina').godina2019 + this.sheet2.find(x => x.opis === 'gotovinski_ekvivalenti').godina2019) / this.sheet2.find(x => x.opis === 'kratkorocna_pasiva').godina2019;
+
+    this.pokazatelji2.find(x => x.opis === 'Koeficijent finansijske stabilnosti').godina2018 = this.sheet2.find(x => x.opis === 'dugotrajna_imovina').godina2018 / (this.sheet2.find(x => x.opis === 'dugorocne_obaveze').godina2018 + this.sheet2.find(x => x.opis === 'kapital').godina2018);
+    this.pokazatelji2.find(x => x.opis === 'Koeficijent finansijske stabilnosti').godina2019 = this.sheet2.find(x => x.opis === 'dugotrajna_imovina').godina2019 / (this.sheet2.find(x => x.opis === 'dugorocne_obaveze').godina2019 + this.sheet2.find(x => x.opis === 'kapital').godina2019);
+
+
+    /*POKAZATELJI EKONOMICNOSTI*/
+
+    this.pokazatelji2.find(x => x.opis === 'Ekonomičnost ukupnog poslovanja').godina2018 = this.sheet2.find(x => x.opis === 'ukupni_prihodi').godina2018 / this.sheet2.find(x => x.opis === 'ukupni_rashodi').godina2018;
+    this.pokazatelji2.find(x => x.opis === 'Ekonomičnost ukupnog poslovanja').godina2019 = this.sheet2.find(x => x.opis === 'ukupni_prihodi').godina2019 / this.sheet2.find(x => x.opis === 'ukupni_rashodi').godina2019;
+
+    this.pokazatelji2.find(x => x.opis === 'Odnos ukupnog prihoda i troška zaposlenih').godina2018 = this.sheet2.find(x => x.opis === 'ukupni_prihodi').godina2018 / this.sheet2.find(x => x.opis === 'trosak_zaposlenih').godina2018;
+    this.pokazatelji2.find(x => x.opis === 'Odnos ukupnog prihoda i troška zaposlenih').godina2019 = this.sheet2.find(x => x.opis === 'ukupni_prihodi').godina2019 / this.sheet2.find(x => x.opis === 'trosak_zaposlenih').godina2019;
+
+    this.pokazatelji2.find(x => x.opis === 'Ekonomičnost finansiranja').godina2018 = this.sheet2.find(x => x.opis === 'finansijski_prihodi').godina2018 / this.sheet2.find(x => x.opis === 'finansijski_rashodi').godina2018;
+    this.pokazatelji2.find(x => x.opis === 'Ekonomičnost finansiranja').godina2019 = this.sheet2.find(x => x.opis === 'finansijski_prihodi').godina2019 / this.sheet2.find(x => x.opis === 'finansijski_rashodi').godina2019;
+
+    /*POKAZATELJI RENTABILNOSTI*/
+
+    this.pokazatelji2.find(x => x.opis === 'Rentabilnost (profitabilnost) kapitala (ROE)').godina2018 = (this.sheet2.find(x => x.opis === 'neto_dobit').godina2018) ?
+      (this.sheet2.find(x => x.opis === 'neto_dobit').godina2018 / this.sheet2.find(x => x.opis === 'kapital').godina2018) : null;
+    this.pokazatelji2.find(x => x.opis === 'Rentabilnost (profitabilnost) kapitala (ROE)').godina2019 = (this.sheet2.find(x => x.opis === 'neto_dobit').godina2019) ?
+      (this.sheet2.find(x => x.opis === 'neto_dobit').godina2019 / this.sheet2.find(x => x.opis === 'kapital').godina2019) : null;
+
+    this.pokazatelji2.find(x => x.opis === 'Rentabilnost (profitabilnost) imovine (ROA)').godina2018 =  (this.sheet2.find(x => x.opis === 'dobit_prije_poreza').godina2018) ?
+      this.sheet2.find(x => x.opis === 'dobit_prije_poreza').godina2018 / this.sheet2.find(x => x.opis === 'ukupna_aktiva').godina2018 : null;
+    this.pokazatelji2.find(x => x.opis === 'Rentabilnost (profitabilnost) imovine (ROA)').godina2019 =  (this.sheet2.find(x => x.opis === 'dobit_prije_poreza').godina2018) ?
+      this.sheet2.find(x => x.opis === 'dobit_prije_poreza').godina2019 / this.sheet2.find(x => x.opis === 'ukupna_aktiva').godina2019: null;
+
+    /*POKAZATELJI ZADUZENOSTI*/
+
+    this.pokazatelji2.find(x => x.opis === 'Pokazatelj zaduženosti').godina2018 = this.sheet2.find(x => x.opis === 'ukupne_obaveze').godina2018 / this.sheet2.find(x => x.opis === 'ukupna_aktiva').godina2018;
+    this.pokazatelji2.find(x => x.opis === 'Pokazatelj zaduženosti').godina2019 = this.sheet2.find(x => x.opis === 'ukupne_obaveze').godina2019 / this.sheet2.find(x => x.opis === 'ukupna_aktiva').godina2019;
+
+    this.pokazatelji2.find(x => x.opis === 'Koeficijent vlastitog finansiranja').godina2018 = this.sheet2.find(x => x.opis === 'kapital').godina2018 / this.sheet2.find(x => x.opis === 'ukupna_aktiva').godina2018;
+    this.pokazatelji2.find(x => x.opis === 'Koeficijent vlastitog finansiranja').godina2019 = this.sheet2.find(x => x.opis === 'kapital').godina2019 / this.sheet2.find(x => x.opis === 'ukupna_aktiva').godina2019;
+
+    this.pokazatelji2.find(x => x.opis === 'Odnos duga i kapitala').godina2018 = this.sheet2.find(x => x.opis === 'ukupne_obaveze').godina2018 / this.sheet2.find(x => x.opis === 'kapital').godina2018;
+    this.pokazatelji2.find(x => x.opis === 'Odnos duga i kapitala').godina2019 = this.sheet2.find(x => x.opis === 'ukupne_obaveze').godina2019 / this.sheet2.find(x => x.opis === 'kapital').godina2019;
+
+    /*POKAZATELJI AKTIVNOSTI*/
+
+    this.pokazatelji2.find(x => x.opis === 'Koeficijent obrta potraživanja').godina2018 = (this.sheet2.find(x => x.opis === 'prihodi_od_prodaje_robe').godina2018 + this.sheet2.find(x => x.opis === 'prihodi_od_prodaje_ucinika').godina2018) / this.sheet2.find(x => x.opis === 'kupci').godina2018;
+    this.pokazatelji2.find(x => x.opis === 'Koeficijent obrta potraživanja').godina2019 = (this.sheet2.find(x => x.opis === 'prihodi_od_prodaje_robe').godina2019 + this.sheet2.find(x => x.opis === 'prihodi_od_prodaje_ucinika').godina2019) / this.sheet2.find(x => x.opis === 'kupci').godina2019;
+
+    this.pokazatelji2.find(x => x.opis === 'Trajanje naplate potraživanja u danima').godina2018 = 365 / this.pokazatelji2.find(x => x.opis === 'Koeficijent obrta potraživanja').godina2018;
+    this.pokazatelji2.find(x => x.opis === 'Trajanje naplate potraživanja u danima').godina2019 = 365 / this.pokazatelji2.find(x => x.opis === 'Koeficijent obrta potraživanja').godina2019;
+
+    this.pokazatelji2.find(x => x.opis === 'Koeficijent obrta ukupne imovine').godina2018 = this.sheet2.find(x => x.opis === 'ukupni_prihodi').godina2018 / this.sheet2.find(x => x.opis === 'ukupna_aktiva').godina2018;
+    this.pokazatelji2.find(x => x.opis === 'Koeficijent obrta ukupne imovine').godina2019 = this.sheet2.find(x => x.opis === 'ukupni_prihodi').godina2019 / this.sheet2.find(x => x.opis === 'ukupna_aktiva').godina2019;
+
+    this.pokazatelji2.find(x => x.opis === 'Dani vezivanja ukupne imovine').godina2018 = 365 / this.pokazatelji2.find(x => x.opis === 'Koeficijent obrta ukupne imovine').godina2018;
+    this.pokazatelji2.find(x => x.opis === 'Dani vezivanja ukupne imovine').godina2019 = 365 / this.pokazatelji2.find(x => x.opis === 'Koeficijent obrta ukupne imovine').godina2019;
+
+    this.pokazatelji2.find(x => x.opis === 'Koeficijent obrta kratkotrajne imovine').godina2018 = this.sheet2.find(x => x.opis === 'ukupni_prihodi').godina2018 / this.sheet2.find(x => x.opis === 'kratkorocna_aktiva').godina2018;
+    this.pokazatelji2.find(x => x.opis === 'Koeficijent obrta kratkotrajne imovine').godina2019 = this.sheet2.find(x => x.opis === 'ukupni_prihodi').godina2019 / this.sheet2.find(x => x.opis === 'kratkorocna_aktiva').godina2019;
+
+    this.pokazatelji2.find(x => x.opis === 'Dani vezivanja kratkotrajne imovine').godina2018 = 365 / this.pokazatelji2.find(x => x.opis === 'Koeficijent obrta kratkotrajne imovine').godina2018;
+    this.pokazatelji2.find(x => x.opis === 'Dani vezivanja kratkotrajne imovine').godina2019 = 365 / this.pokazatelji2.find(x => x.opis === 'Koeficijent obrta kratkotrajne imovine').godina2019;
+
+    this.pokazatelji2.find(x => x.opis === 'Koeficijent obrta zaliha').godina2018 = (this.sheet2.find(x => x.opis === 'prihodi_od_prodaje_robe').godina2018 + this.sheet2.find(x => x.opis === 'prihodi_od_prodaje_ucinika').godina2018) / this.sheet2.find(x => x.opis === 'zalihe_i_sredstva_namjenjena_prodaji').godina2018;
+    this.pokazatelji2.find(x => x.opis === 'Koeficijent obrta zaliha').godina2019 = (this.sheet2.find(x => x.opis === 'prihodi_od_prodaje_robe').godina2019 + this.sheet2.find(x => x.opis === 'prihodi_od_prodaje_ucinika').godina2019) / this.sheet2.find(x => x.opis === 'zalihe_i_sredstva_namjenjena_prodaji').godina2019;
+
+    this.pokazatelji2.find(x => x.opis === 'Dani vezivanja zaliha').godina2018 = 365 / this.pokazatelji2.find(x => x.opis === 'Koeficijent obrta zaliha').godina2018;
+    this.pokazatelji2.find(x => x.opis === 'Dani vezivanja zaliha').godina2019 = 365 / this.pokazatelji2.find(x => x.opis === 'Koeficijent obrta zaliha').godina2019;
+
+    this.pokazatelji2.forEach((item: any) => {
+      item.godina2018 = Math.round(item.godina2018 * 100) / 100;
+      item.godina2019 = Math.round(item.godina2019 * 100) / 100;
+    });
+
   }
 
 

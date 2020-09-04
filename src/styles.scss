@@ -1,1 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
+
+
+.nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
+  color: white !important;
+  background-color: red !important;
+}
+
+.nav-tabs .nav-link {
+  font-weight: bold;
+  border-color: red !important;
+}
+
+a {
+  color: red !important;
+  font-weight: 300;
+}
+
+.table-responsive {
+  max-height: 400px;
+  overflow-x: hidden !important;
+}
