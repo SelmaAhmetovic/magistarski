@@ -61,7 +61,7 @@
   "homepage": "https://demos.creative-tim.com/black-dashboard-angular/#/dashboard",
   "private": false,
   "dependencies": {
-    "@angular/animations": "9.0.5",
+    "@angular/animations": "^9.0.5",
     "@angular/common": "9.0.5",
     "@angular/compiler": "9.0.5",
     "@angular/core": "9.0.5",
@@ -75,7 +75,7 @@
     "core-js": "3.6.4",
     "file-saver": "^2.0.2",
     "lodash": "^4.17.20",
-    "ngx-toastr": "10.0.4",
+    "ngx-toastr": "^10.0.4",
     "rxjs": "6.5.2",
     "tslib": "1.10.0",
     "xlsx": "^0.16.6",

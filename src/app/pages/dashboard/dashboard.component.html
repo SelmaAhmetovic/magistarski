@@ -1,5 +1,7 @@
 <div class=" content">
 
+  <!--<canvas id="myChart" width="400" height="400"></canvas>-->
+
 
   <div class=" row">
     <div class=" col-md-12">
@@ -49,6 +51,7 @@
                   </table>
                 </div>
                 <button class="btn btn-danger" (click)="calculate1()">Izračunaj</button>
+                <button class="btn btn-danger" (click)="showLikvidnostGraph(pokazatelji1, 'likvidnostPokazatelji1')">Show graphs</button>
 
                 <div class=" table-responsive" *ngIf="pokazatelji1[0].godina2018 !== null">
                   <table class=" table tablesorter">
@@ -68,7 +71,6 @@
                     </tbody>
                   </table>
                 </div>
-
               </ng-template>
             </li>
             <li [ngbNavItem]="2">
@@ -93,6 +95,7 @@
                   </table>
                 </div>
                 <button class="btn btn-danger" (click)="calculate2()">Izračunaj</button>
+                <button class="btn btn-danger" (click)="showLikvidnostGraph(pokazatelji2, 'likvidnostPokazatelji2')">Show graphs</button>
 
                 <div class=" table-responsive" *ngIf="pokazatelji2[0].godina2018 !== null">
                   <table class=" table tablesorter">
@@ -112,11 +115,9 @@
                     </tbody>
                   </table>
                 </div>
-
               </ng-template>
             </li>
           </ul>
-
           <div [ngbNavOutlet]="nav" class="mt-2"></div>
 
         </div>
@@ -124,6 +125,51 @@
     </div>
   </div>
 
+  <div class="row" *ngIf="active === 1">
+    <div class="col-lg-4">
+      <div class="card">
+        <div class="card-body">
+          <div class=" chart-area">
+            <canvas id="likvidnostPokazatelji1"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="active === 2">
+    <div class="col-lg-4">
+      <div class="card">
+        <div class="card-body">
+          <div class=" chart-area">
+            <canvas id="likvidnostPokazatelji2"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
 
   <div class=" row">
     <div class=" col-12">

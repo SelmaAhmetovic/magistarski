@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import Chart from 'chart.js';
 import * as XLSX from 'xlsx';
 import * as _ from "lodash";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: "app-dashboard",
@@ -131,7 +132,7 @@ export class DashboardComponent implements OnInit {
   title = 'read-excel-in-angular8';
   exceltoJson = {};
 
-  constructor() {
+  constructor(private toastr: ToastrService) {
     this.pokazatelji2 = _.cloneDeep(this.pokazatelji1);
   }
 
@@ -146,7 +147,7 @@ export class DashboardComponent implements OnInit {
     // }
     const reader: FileReader = new FileReader();
     reader.readAsBinaryString(target.files[0]);
-    console.log("filename", target.files[0].name);
+    /*console.log("filename", target.files[0].name);*/
     this.exceltoJson['filename'] = target.files[0].name;
     reader.onload = (e: any) => {
       /* create workbook */
@@ -186,7 +187,6 @@ export class DashboardComponent implements OnInit {
 
 
   loadDataFromExcelFile(file: any) {
-    console.log("file", file);
     this.sheet1 = file.sheet1;
     this.sheet2 = file.sheet2;
 
@@ -283,6 +283,7 @@ export class DashboardComponent implements OnInit {
       item.godina2019 = Math.round(item.godina2019 * 100) / 100;
     });
 
+    //this.showLikvidnostGraph();
   }
 
 
@@ -370,6 +371,8 @@ export class DashboardComponent implements OnInit {
 
 
   ngOnInit() {
+
+
     var gradientChartOptionsConfigurationWithTooltipBlue: any = {
       maintainAspectRatio: false,
       legend: {
@@ -659,6 +662,10 @@ export class DashboardComponent implements OnInit {
       }
     };
 
+
+    /*chartLineRed*/
+
+
     this.canvas = document.getElementById("chartLineRed");
     this.ctx = this.canvas.getContext("2d");
 
@@ -694,6 +701,10 @@ export class DashboardComponent implements OnInit {
       data: data,
       options: gradientChartOptionsConfigurationWithTooltipRed
     });
+
+
+
+    /*chartLineGreen*/
 
 
     this.canvas = document.getElementById("chartLineGreen");
@@ -744,7 +755,7 @@ export class DashboardComponent implements OnInit {
     ];
     this.data = this.datasets[0];
 
-
+    /*chartBig1*/
 
     this.canvas = document.getElementById("chartBig1");
     this.ctx = this.canvas.getContext("2d");
@@ -781,6 +792,7 @@ export class DashboardComponent implements OnInit {
     };
     this.myChartData = new Chart(this.ctx, config);
 
+    /*CountryChart*/
 
     this.canvas = document.getElementById("CountryChart");
     this.ctx  = this.canvas.getContext("2d");
@@ -815,6 +827,125 @@ export class DashboardComponent implements OnInit {
     });
 
   }
+
+  public showLikvidnostGraph(data: any, id: any) {
+
+    if(data[0].godina2018 === null) {
+      this.toastr.error('You must calculate first', 'Missing data');
+      return;
+    }
+    this.canvas = document.getElementById(id);
+    this.ctx  = this.canvas.getContext("2d");
+
+    let myLikivdnostiData = [];
+
+    myLikivdnostiData.push(data.find(x => x.opis === 'Koeficijent tekuće likvidnosti').godina2018);
+    myLikivdnostiData.push(data.find(x => x.opis === 'Koeficijent tekuće likvidnosti').godina2019);
+
+    myLikivdnostiData.push(data.find(x => x.opis === 'Koeficijent ubrzane likvidnosti').godina2018);
+    myLikivdnostiData.push(data.find(x => x.opis === 'Koeficijent ubrzane likvidnosti').godina2019);
+
+    myLikivdnostiData.push(data.find(x => x.opis === 'Koeficijent trenutne likvidnosti').godina2018);
+    myLikivdnostiData.push(data.find(x => x.opis === 'Koeficijent trenutne likvidnosti').godina2019);
+
+    myLikivdnostiData.push(data.find(x => x.opis === 'Koeficijent finansijske stabilnosti').godina2018);
+    myLikivdnostiData.push(data.find(x => x.opis === 'Koeficijent finansijske stabilnosti').godina2019);
+
+
+/*
+    GRADIJENT PRIMJER
+
+
+
+    var blueStroke = this.ctx.createLinearGradient(0, 230, 0, 50);
+
+    blueStroke.addColorStop(1, 'rgba(29,140,248,0.2)');
+    blueStroke.addColorStop(0.8, 'rgba(29,140,248,0.0)');
+    blueStroke.addColorStop(0, 'rgba(29,140,248,0)'); //blue colors
+
+    var redStroke = this.ctx.createLinearGradient(0, 230, 0, 50);
+
+    redStroke.addColorStop(1, 'rgba(233,32,16,1)');
+    redStroke.addColorStop(0.8, 'rgba(233,32,16,0.5)');
+    redStroke.addColorStop(0, 'rgba(233,32,16,0)'); //red colors*/
+
+
+    var myData = {
+      labels: ["Koeficijent tekuće likvidnosti", "Koeficijent ubrzane likvidnosti", "Koeficijent trenutne likvidnosti", "Koeficijent finansijske stabilnosti"],
+      datasets: [
+        {
+          label: "2018",
+          backgroundColor: "blue",
+          data: [myLikivdnostiData[0], myLikivdnostiData[2], myLikivdnostiData[4], myLikivdnostiData[6]]
+        },
+        {
+          label: "2019",
+          backgroundColor: "red",
+          data: [myLikivdnostiData[1], myLikivdnostiData[3], myLikivdnostiData[5], myLikivdnostiData[7]]
+        }
+      ]
+    };
+
+
+    var myChart = new Chart(this.ctx, {
+      type: 'bar',
+      responsive: true,
+      legend: {
+        display: false
+      },
+      data: myData,
+      options: {
+        barValueSpacing: 20,
+        scales: {
+          yAxes: [{
+            ticks: {
+              min: 0,
+            }
+          }]
+        }
+      }
+    });
+
+   /* RADI*/
+
+    /*var ctx = document.getElementById("myChart").getContext("2d");
+
+    var data = {
+      labels: ["Chocolate", "Vanilla", "Strawberry"],
+      datasets: [{
+        label: "Blue",
+        backgroundColor: "blue",
+        data: [3, 7, 4]
+      }, {
+        label: "Red",
+        backgroundColor: "red",
+        data: [4, 3, 5]
+      }, {
+        label: "Green",
+        backgroundColor: "green",
+        data: [7, 2, 6]
+      }]
+    };
+
+    var myBarChart = new Chart(ctx, {
+      type: 'bar',
+      data: data,
+      options: {
+        barValueSpacing: 20,
+        scales: {
+          yAxes: [{
+            ticks: {
+              min: 0,
+            }
+          }]
+        }
+      }
+    });*/
+
+    /*RADI KRAJ*/
+
+  }
+
   public updateOptions() {
     this.myChartData.data.datasets[0].data = this.data;
     this.myChartData.update();
