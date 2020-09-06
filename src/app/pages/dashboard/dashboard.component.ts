@@ -21,6 +21,7 @@ export class DashboardComponent implements OnInit {
   public clicked: boolean = true;
   public clicked1: boolean = false;
   public clicked2: boolean = false;
+  public shownGraphs: boolean = false;
   public active = 1;
   public pokazatelji2 = [];
   public pokazatelji1 = [
@@ -134,6 +135,7 @@ export class DashboardComponent implements OnInit {
 
   constructor(private toastr: ToastrService) {
     this.pokazatelji2 = _.cloneDeep(this.pokazatelji1);
+
   }
 
 
@@ -282,8 +284,6 @@ export class DashboardComponent implements OnInit {
       item.godina2018 = Math.round(item.godina2018 * 100) / 100;
       item.godina2019 = Math.round(item.godina2019 * 100) / 100;
     });
-
-    //this.showLikvidnostGraph();
   }
 
 
@@ -371,7 +371,6 @@ export class DashboardComponent implements OnInit {
 
 
   ngOnInit() {
-
 
     var gradientChartOptionsConfigurationWithTooltipBlue: any = {
       maintainAspectRatio: false,
@@ -828,6 +827,14 @@ export class DashboardComponent implements OnInit {
 
   }
 
+  public showGraphs(data: any) {
+    this.shownGraphs = true;
+    this.showLikvidnostGraph(data, 'likvidnostPokazatelji' + this.active.toString());
+    this.showZaduzenostGraph(data, 'zaduzenostPokazatelji' + this.active.toString());
+    this.showEkonomicnostGraph(data, 'ekonomicnostPokazatelji' + this.active.toString());
+    this.showAkvinostGraph(data, 'aktivnostiPokazatelji' + this.active.toString());
+  }
+
   public showLikvidnostGraph(data: any, id: any) {
 
     if(data[0].godina2018 === null) {
@@ -905,31 +912,137 @@ export class DashboardComponent implements OnInit {
         }
       }
     });
+  }
 
-   /* RADI*/
+  showEkonomicnostGraph(data: any, id: any) {
+    if(data[0].godina2018 === null) {
+      this.toastr.error('You must calculate first', 'Missing data');
+      return;
+    }
+    this.canvas = document.getElementById(id);
+    this.ctx  = this.canvas.getContext("2d");
 
-    /*var ctx = document.getElementById("myChart").getContext("2d");
+    let myLikivdnostiData = [];
 
-    var data = {
-      labels: ["Chocolate", "Vanilla", "Strawberry"],
-      datasets: [{
-        label: "Blue",
-        backgroundColor: "blue",
-        data: [3, 7, 4]
-      }, {
-        label: "Red",
-        backgroundColor: "red",
-        data: [4, 3, 5]
-      }, {
-        label: "Green",
-        backgroundColor: "green",
-        data: [7, 2, 6]
-      }]
+    myLikivdnostiData.push(data.find(x => x.opis === 'Ekonomičnost ukupnog poslovanja').godina2018);
+    myLikivdnostiData.push(data.find(x => x.opis === 'Ekonomičnost ukupnog poslovanja').godina2019);
+
+    myLikivdnostiData.push(data.find(x => x.opis === 'Odnos ukupnog prihoda i troška zaposlenih').godina2018);
+    myLikivdnostiData.push(data.find(x => x.opis === 'Odnos ukupnog prihoda i troška zaposlenih').godina2019);
+
+    myLikivdnostiData.push(data.find(x => x.opis === 'Ekonomičnost finansiranja').godina2018);
+    myLikivdnostiData.push(data.find(x => x.opis === 'Ekonomičnost finansiranja').godina2019);
+
+
+    var blueStroke = this.ctx.createLinearGradient(0, 230, 0, 50);
+
+    blueStroke.addColorStop(1, 'rgba(29,140,248,0.2)');
+    blueStroke.addColorStop(0.4, 'rgba(29,140,248,0.0)');
+    blueStroke.addColorStop(0, 'rgba(29,140,248,0)'); //blue colors
+
+    var redStroke = this.ctx.createLinearGradient(0, 230, 0, 50);
+
+    redStroke.addColorStop(1, 'rgba(233,32,16,1)');
+    redStroke.addColorStop(0.4, 'rgba(233,32,16,0.5)');
+    redStroke.addColorStop(0, 'rgba(233,32,16,0)'); //red colors*/
+
+
+   /* borderColor: 'red',*/
+
+    var dataFirst = {
+      label: "2018",
+      data: [myLikivdnostiData[0], myLikivdnostiData[2],myLikivdnostiData[4]],
+      lineTension: 0,
+      fill: false,
+      backgroundColor: blueStroke,
+      hoverBackgroundColor: blueStroke,
+      borderColor: '#1f8ef1',
+      borderWidth: 2,
+      borderDash: [],
+      borderDashOffset: 0.0,
     };
 
-    var myBarChart = new Chart(ctx, {
-      type: 'bar',
-      data: data,
+    var dataSecond = {
+      label: "2019",
+      data: [myLikivdnostiData[1],myLikivdnostiData[3],myLikivdnostiData[5]],
+      lineTension: 0,
+      fill: false,
+      backgroundColor: redStroke,
+      hoverBackgroundColor: redStroke,
+      borderColor: '#ec250d',
+      borderWidth: 2,
+      borderDash: [],
+      borderDashOffset: 0.0,
+    };
+
+    var chartData = {
+      labels: ["Ekonomičnost ukupnog poslovanja", "Odnos ukupnog prihoda i troška zaposlenih", "Ekonomičnost finansiranja"],
+      datasets: [dataFirst, dataSecond]
+    };
+
+    var chartOptions = {
+      legend: {
+        display: true,
+        position: 'top',
+        labels: {
+          boxWidth: 10
+        }
+      }
+    };
+
+    var lineChart = new Chart(this.ctx, {
+      type: 'line',
+      data: chartData,
+      options: chartOptions
+    });
+  }
+
+
+  public showZaduzenostGraph(data: any, id: any) {
+
+    if(data[0].godina2018 === null) {
+      this.toastr.error('You must calculate first', 'Missing data');
+      return;
+    }
+    this.canvas = document.getElementById(id);
+    this.ctx  = this.canvas.getContext("2d");
+
+    let myLikivdnostiData = [];
+
+    myLikivdnostiData.push(data.find(x => x.opis === 'Odnos duga i kapitala').godina2018);
+    myLikivdnostiData.push(data.find(x => x.opis === 'Odnos duga i kapitala').godina2019);
+
+    myLikivdnostiData.push(data.find(x => x.opis === 'Koeficijent vlastitog finansiranja').godina2018);
+    myLikivdnostiData.push(data.find(x => x.opis === 'Koeficijent vlastitog finansiranja').godina2019);
+
+    myLikivdnostiData.push(data.find(x => x.opis === 'Pokazatelj zaduženosti').godina2018);
+    myLikivdnostiData.push(data.find(x => x.opis === 'Pokazatelj zaduženosti').godina2019);
+
+
+    var myData = {
+      labels: ["Odnos duga i kapitala", "Koeficijent vlastitog finansiranja", "Pokazatelj zaduženosti"],
+      datasets: [
+        {
+          label: "2018",
+          backgroundColor: "blue",
+          data: [myLikivdnostiData[0], myLikivdnostiData[2], myLikivdnostiData[4]]
+        },
+        {
+          label: "2019",
+          backgroundColor: "red",
+          data: [myLikivdnostiData[1], myLikivdnostiData[3], myLikivdnostiData[5]]
+        }
+      ]
+    };
+
+
+    var myChart = new Chart(this.ctx, {
+      type: 'horizontalBar',
+      responsive: true,
+      legend: {
+        display: false
+      },
+      data: myData,
       options: {
         barValueSpacing: 20,
         scales: {
@@ -940,11 +1053,111 @@ export class DashboardComponent implements OnInit {
           }]
         }
       }
-    });*/
-
-    /*RADI KRAJ*/
-
+    });
   }
+
+
+
+  showAkvinostGraph(data: any, id: any) {
+    if(data[0].godina2018 === null) {
+      this.toastr.error('You must calculate first', 'Missing data');
+      return;
+    }
+    this.canvas = document.getElementById(id);
+    this.ctx  = this.canvas.getContext("2d");
+
+    let myLikivdnostiData = [];
+
+    myLikivdnostiData.push(data.find(x => x.opis === 'Koeficijent obrta potraživanja').godina2018);
+    myLikivdnostiData.push(data.find(x => x.opis === 'Koeficijent obrta potraživanja').godina2019);
+
+    myLikivdnostiData.push(data.find(x => x.opis === 'Trajanje naplate potraživanja u danima').godina2018);
+    myLikivdnostiData.push(data.find(x => x.opis === 'Trajanje naplate potraživanja u danima').godina2019);
+
+    myLikivdnostiData.push(data.find(x => x.opis === 'Koeficijent obrta ukupne imovine').godina2018);
+    myLikivdnostiData.push(data.find(x => x.opis === 'Koeficijent obrta ukupne imovine').godina2019);
+
+    myLikivdnostiData.push(data.find(x => x.opis === 'Dani vezivanja ukupne imovine').godina2018);
+    myLikivdnostiData.push(data.find(x => x.opis === 'Dani vezivanja ukupne imovine').godina2019);
+
+    myLikivdnostiData.push(data.find(x => x.opis === 'Koeficijent obrta kratkotrajne imovine').godina2018);
+    myLikivdnostiData.push(data.find(x => x.opis === 'Koeficijent obrta kratkotrajne imovine').godina2019);
+
+    myLikivdnostiData.push(data.find(x => x.opis === 'Dani vezivanja kratkotrajne imovine').godina2018);
+    myLikivdnostiData.push(data.find(x => x.opis === 'Dani vezivanja kratkotrajne imovine').godina2019);
+
+    myLikivdnostiData.push(data.find(x => x.opis === 'Koeficijent obrta zaliha').godina2018);
+    myLikivdnostiData.push(data.find(x => x.opis === 'Koeficijent obrta zaliha').godina2019);
+
+    myLikivdnostiData.push(data.find(x => x.opis === 'Dani vezivanja zaliha').godina2018);
+    myLikivdnostiData.push(data.find(x => x.opis === 'Dani vezivanja zaliha').godina2019);
+
+
+    var blueStroke = this.ctx.createLinearGradient(0, 230, 0, 50);
+
+    blueStroke.addColorStop(1, 'rgba(29,140,248,0.2)');
+    blueStroke.addColorStop(0.4, 'rgba(29,140,248,0.0)');
+    blueStroke.addColorStop(0, 'rgba(29,140,248,0)'); //blue colors
+
+    var redStroke = this.ctx.createLinearGradient(0, 230, 0, 50);
+
+    redStroke.addColorStop(1, 'rgba(233,32,16,1)');
+    redStroke.addColorStop(0.4, 'rgba(233,32,16,0.5)');
+    redStroke.addColorStop(0, 'rgba(233,32,16,0)'); //red colors*/
+
+
+    var dataFirst = {
+      label: "2018",
+      data: [myLikivdnostiData[0], myLikivdnostiData[2],myLikivdnostiData[4], myLikivdnostiData[6], myLikivdnostiData[8]
+        ,myLikivdnostiData[10], myLikivdnostiData[12], myLikivdnostiData[14]],
+      lineTension: 0,
+      fill: false,
+      backgroundColor: blueStroke,
+      hoverBackgroundColor: blueStroke,
+      borderColor: '#1f8ef1',
+      borderWidth: 2,
+      borderDash: [],
+      borderDashOffset: 0.0,
+    };
+
+    var dataSecond = {
+      label: "2019",
+      data: [myLikivdnostiData[1],myLikivdnostiData[3],myLikivdnostiData[5], myLikivdnostiData[7], myLikivdnostiData[9]
+        ,myLikivdnostiData[11], myLikivdnostiData[13], myLikivdnostiData[15]],
+      lineTension: 0,
+      fill: false,
+      backgroundColor: redStroke,
+      hoverBackgroundColor: redStroke,
+      borderColor: '#ec250d',
+      borderWidth: 2,
+      borderDash: [],
+      borderDashOffset: 0.0,
+    };
+
+    var chartData = {
+      labels: ["Koeficijent obrta potraživanja", "Trajanje naplate potraživanja u danima", "Koeficijent obrta ukupne imovine",
+        "Dani vezivanja ukupne imovine", "Koeficijent obrta kratkotrajne imovine", "Dani vezivanja kratkotrajne imovine",
+        "Koeficijent obrta zaliha", "Dani vezivanja zaliha"],
+      datasets: [dataFirst, dataSecond]
+    };
+
+    var chartOptions = {
+      legend: {
+        display: true,
+        position: 'top',
+        labels: {
+          boxWidth: 10
+        }
+      }
+    };
+
+    var lineChart = new Chart(this.ctx, {
+      type: 'line',
+      data: chartData,
+      options: chartOptions
+    });
+  }
+
 
   public updateOptions() {
     this.myChartData.data.datasets[0].data = this.data;

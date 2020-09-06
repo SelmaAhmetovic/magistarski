@@ -1,8 +1,5 @@
 <div class=" content">
 
-  <!--<canvas id="myChart" width="400" height="400"></canvas>-->
-
-
   <div class=" row">
     <div class=" col-md-12">
       <div class=" card">
@@ -51,7 +48,7 @@
                   </table>
                 </div>
                 <button class="btn btn-danger" (click)="calculate1()">Izračunaj</button>
-                <button class="btn btn-danger" (click)="showLikvidnostGraph(pokazatelji1, 'likvidnostPokazatelji1')">Show graphs</button>
+                <button class="btn btn-danger" (click)="showGraphs(pokazatelji1)">Show graphs</button>
 
                 <div class=" table-responsive" *ngIf="pokazatelji1[0].godina2018 !== null">
                   <table class=" table tablesorter">
@@ -95,7 +92,7 @@
                   </table>
                 </div>
                 <button class="btn btn-danger" (click)="calculate2()">Izračunaj</button>
-                <button class="btn btn-danger" (click)="showLikvidnostGraph(pokazatelji2, 'likvidnostPokazatelji2')">Show graphs</button>
+                <button class="btn btn-danger" (click)="showGraphs(pokazatelji2)">Show graphs</button>
 
                 <div class=" table-responsive" *ngIf="pokazatelji2[0].godina2018 !== null">
                   <table class=" table tablesorter">
@@ -125,9 +122,14 @@
     </div>
   </div>
 
-  <div class="row" *ngIf="active === 1">
-    <div class="col-lg-4">
+  <div class="row" *ngIf="active === 1 && sheet1.length > 1">
+    <div class="col-lg-6">
       <div class="card">
+        <div class=" card-header">
+          <h3 class=" card-title">
+            Pokazatelji likvidnosti
+          </h3>
+        </div>
         <div class="card-body">
           <div class=" chart-area">
             <canvas id="likvidnostPokazatelji1"></canvas>
@@ -135,11 +137,59 @@
         </div>
       </div>
     </div>
+    <div class="col-lg-6">
+      <div class="card">
+        <div class=" card-header">
+          <h3 class=" card-title">
+            Pokazatelji ekonomičnosti
+          </h3>
+        </div>
+        <div class="card-body">
+          <div class=" chart-area">
+            <canvas id="ekonomicnostPokazatelji1"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="card">
+        <div class=" card-header">
+          <h3 class=" card-title">
+           Pokazatelji zaduženosti
+          </h3>
+        </div>
+        <div class="card-body">
+          <div class=" chart-area">
+            <canvas id="zaduzenostPokazatelji1"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card">
+        <div class=" card-header">
+          <h3 class=" card-title">
+           Pokazatelji aktivnosti
+          </h3>
+        </div>
+        <div class="card-body">
+          <div class=" chart-area">
+            <canvas id="aktivnostiPokazatelji1"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="row" *ngIf="active === 2">
-    <div class="col-lg-4">
+  <div class="row" *ngIf="active === 2 && sheet2.length > 1">
+    <div class="col-lg-6">
       <div class="card">
+        <div class=" card-header">
+          <h3 class=" card-title">
+            Pokazatelji likvidnosti
+          </h3>
+        </div>
         <div class="card-body">
           <div class=" chart-area">
             <canvas id="likvidnostPokazatelji2"></canvas>
@@ -147,9 +197,52 @@
         </div>
       </div>
     </div>
+    <div class="col-lg-6">
+      <div class="card">
+        <div class=" card-header">
+          <h3 class=" card-title">
+            Pokazatelji ekonomičnosti
+          </h3>
+        </div>
+        <div class="card-body">
+          <div class=" chart-area">
+            <canvas id="ekonomicnostPokazatelji2"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card">
+        <div class=" card-header">
+          <h3 class=" card-title">
+            Pokazatelji zaduženosti
+          </h3>
+        </div>
+        <div class="card-body">
+          <div class=" chart-area">
+            <canvas id="zaduzenostPokazatelji2"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="card">
+        <div class=" card-header">
+          <h3 class=" card-title">
+            Pokazatelji aktivnosti
+          </h3>
+        </div>
+        <div class="card-body">
+          <div class=" chart-area">
+            <canvas id="aktivnostiPokazatelji2"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <br>
+  <!--<br>
   <br>
   <br>
   <br>
@@ -565,5 +658,5 @@
         </div>
       </div>
     </div>
-  </div>
+  </div>-->
 </div>
