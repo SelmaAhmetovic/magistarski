@@ -48,7 +48,8 @@
                   </table>
                 </div>
                 <button class="btn btn-danger" (click)="calculate1()">Izračunaj</button>
-                <button class="btn btn-danger" (click)="showGraphs(pokazatelji1)">Show graphs</button>
+                <!--
+                <button class="btn btn-danger" (click)="showGraphs(pokazatelji1)">Show graphs</button>-->
 
                 <div class=" table-responsive" *ngIf="pokazatelji1[0].godina2018 !== null">
                   <table class=" table tablesorter">
@@ -92,7 +93,8 @@
                   </table>
                 </div>
                 <button class="btn btn-danger" (click)="calculate2()">Izračunaj</button>
-                <button class="btn btn-danger" (click)="showGraphs(pokazatelji2)">Show graphs</button>
+                <!--
+                <button class="btn btn-danger" (click)="showGraphs(pokazatelji2)">Show graphs</button>-->
 
                 <div class=" table-responsive" *ngIf="pokazatelji2[0].godina2018 !== null">
                   <table class=" table tablesorter">
@@ -176,6 +178,21 @@
         <div class="card-body">
           <div class=" chart-area">
             <canvas id="aktivnostiPokazatelji1"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="card">
+        <div class=" card-header">
+          <h3 class=" card-title">
+           Pokazatelji rentabilnosti
+          </h3>
+        </div>
+        <div class="card-body">
+          <div class=" chart-area">
+            <canvas id="rentabilnostPokazatelji1"></canvas>
           </div>
         </div>
       </div>

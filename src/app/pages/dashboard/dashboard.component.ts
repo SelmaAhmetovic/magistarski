@@ -284,6 +284,8 @@ export class DashboardComponent implements OnInit {
       item.godina2018 = Math.round(item.godina2018 * 100) / 100;
       item.godina2019 = Math.round(item.godina2019 * 100) / 100;
     });
+
+    this.showGraphs(this.pokazatelji1);
   }
 
 
@@ -367,6 +369,7 @@ export class DashboardComponent implements OnInit {
       item.godina2019 = Math.round(item.godina2019 * 100) / 100;
     });
 
+    this.showGraphs(this.pokazatelji2);
   }
 
 
@@ -833,6 +836,10 @@ export class DashboardComponent implements OnInit {
     this.showZaduzenostGraph(data, 'zaduzenostPokazatelji' + this.active.toString());
     this.showEkonomicnostGraph(data, 'ekonomicnostPokazatelji' + this.active.toString());
     this.showAkvinostGraph(data, 'aktivnostiPokazatelji' + this.active.toString());
+
+    if(this.active === 1) {
+      this.showRentabilnostGraph(data, 'rentabilnostPokazatelji' + this.active.toString());
+    }
   }
 
   public showLikvidnostGraph(data: any, id: any) {
@@ -1158,6 +1165,58 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+
+  public showRentabilnostGraph(data: any, id: any) {
+    if(data[0].godina2018 === null) {
+      this.toastr.error('You must calculate first', 'Missing data');
+      return;
+    }
+    this.canvas = document.getElementById(id);
+    this.ctx  = this.canvas.getContext("2d");
+
+    let myLikivdnostiData = [];
+
+    myLikivdnostiData.push(data.find(x => x.opis === 'Rentabilnost (profitabilnost) kapitala (ROE)').godina2018);
+    myLikivdnostiData.push(data.find(x => x.opis === 'Rentabilnost (profitabilnost) kapitala (ROE)').godina2019);
+
+    myLikivdnostiData.push(data.find(x => x.opis === 'Rentabilnost (profitabilnost) imovine (ROA)').godina2018);
+    myLikivdnostiData.push(data.find(x => x.opis === 'Rentabilnost (profitabilnost) imovine (ROA)').godina2019);
+
+    var myData = {
+      labels: ["Rentabilnost (profitabilnost) kapitala (ROE)", "Rentabilnost (profitabilnost) imovine (ROA)"],
+      datasets: [
+        {
+          label: "2018",
+          backgroundColor: "blue",
+          data: [myLikivdnostiData[0], myLikivdnostiData[2]]
+        },
+        {
+          label: "2019",
+          backgroundColor: "red",
+          data: [myLikivdnostiData[1], myLikivdnostiData[3]]
+        }
+      ]
+    };
+
+    var myChart = new Chart(this.ctx, {
+      type: 'bar',
+      responsive: true,
+      legend: {
+        display: false
+      },
+      data: myData,
+      options: {
+        barValueSpacing: 20,
+        scales: {
+          yAxes: [{
+            ticks: {
+              min: 0,
+            }
+          }]
+        }
+      }
+    });
+  }
 
   public updateOptions() {
     this.myChartData.data.datasets[0].data = this.data;
