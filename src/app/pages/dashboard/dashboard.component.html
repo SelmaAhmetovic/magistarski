@@ -75,8 +75,8 @@
                       <td>{{item.opis}}</td>
                       <td>{{(item.godina2018).toLocaleString("hr")}}</td>
                       <td>{{(item.godina2019).toLocaleString("hr")}}</td>
-                      <td>{{(item.godina2019 - item.godina2018).toLocaleString("hr") }}</td>
-                      <td>{{((item.godina2019 / item.godina2018)*100).toLocaleString("hr") }}</td>
+                      <td>{{(item.godina2019 - item.godina2018).toFixed(1).toLocaleString("hr") }}</td>
+                      <td>{{((item.godina2019 / item.godina2018)*100).toFixed(1).toLocaleString("hr") }}</td>
                     </tr>
                     </tbody>
                   </table>
@@ -128,8 +128,8 @@
                       <td>{{item.opis}}</td>
                       <td>{{(item.godina2018).toLocaleString("hr")}}</td>
                       <td>{{(item.godina2019).toLocaleString("hr")}}</td>
-                      <td>{{(item.godina2019 - item.godina2018).toLocaleString("hr") }}</td>
-                      <td>{{((item.godina2019 / item.godina2018) *100).toLocaleString("hr")}}</td>
+                      <td>{{(item.godina2019 - item.godina2018).toFixed(1).toLocaleString("hr") }}</td>
+                      <td>{{((item.godina2019 / item.godina2018) *100).toFixed(1).toLocaleString("hr")}}</td>
                     </tr>
                     </tbody>
                   </table>
