@@ -37,16 +37,16 @@
                     <thead class="text-primary">
                     <tr>
                       <th>Opis</th>
-                      <th>Godina 2018</th>
-                      <th>Godina 2019</th>
+                      <th class="text-right">Godina 2018</th>
+                      <th class="text-right">Godina 2019</th>
 
                     </tr>
                     </thead>
                     <tbody>
                     <tr *ngFor="let item of data1">
                       <td>{{item.opis}}</td>
-                      <td>{{(item.godina2018).toLocaleString("hr")}}</td>
-                      <td>{{(item.godina2019).toLocaleString("hr")}}</td>
+                      <td class="text-right">{{(item.godina2018).toLocaleString("hr")}}</td>
+                      <td class="text-right">{{(item.godina2019).toLocaleString("hr")}}</td>
                     </tr>
                     </tbody>
                   </table>
@@ -64,19 +64,19 @@
                     <thead class=" text-primary">
                     <tr>
                       <th>Opis</th>
-                      <th>Godina 2018</th>
-                      <th>Godina 2019</th>
-                      <th>Razlika</th>
-                      <th>Index</th>
+                      <th class="text-right">Godina 2018</th>
+                      <th class="text-right">Godina 2019</th>
+                      <th class="text-right">Razlika</th>
+                      <th class="text-right">Index</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr *ngFor="let item of pokazatelji1">
                       <td>{{item.opis}}</td>
-                      <td>{{(item.godina2018).toLocaleString("hr")}}</td>
-                      <td>{{(item.godina2019).toLocaleString("hr")}}</td>
-                      <td>{{(item.godina2019 - item.godina2018).toFixed(1).toLocaleString("hr") }}</td>
-                      <td>{{((item.godina2019 / item.godina2018)*100).toFixed(1).toLocaleString("hr") }}</td>
+                      <td class="text-right">{{(item.godina2018).toLocaleString("hr")}}</td>
+                      <td class="text-right">{{(item.godina2019).toLocaleString("hr")}}</td>
+                      <td class="text-right">{{(item.godina2019 - item.godina2018).toFixed(1).toLocaleString("hr").replace('.',',') }}</td>
+                      <td class="text-right">{{((item.godina2019 / item.godina2018)*100).toFixed(1).toLocaleString("hr").replace('.',',') }}</td>
                     </tr>
                     </tbody>
                   </table>
@@ -91,15 +91,15 @@
                     <thead class=" text-primary">
                     <tr>
                       <th>Opis</th>
-                      <th>Godina 2018</th>
-                      <th>Godina 2019</th>
+                      <th class="text-right">Godina 2018</th>
+                      <th class="text-right">Godina 2019</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr *ngFor="let item of data2">
                       <td>{{item.opis}}</td>
-                      <td>{{(item.godina2018).toLocaleString("hr")}}</td>
-                      <td>{{(item.godina2019).toLocaleString("hr")}}</td>
+                      <td class="text-right">{{(item.godina2018).toLocaleString("hr")}}</td>
+                      <td class="text-right">{{(item.godina2019).toLocaleString("hr")}}</td>
                     </tr>
                     </tbody>
                   </table>
@@ -117,19 +117,19 @@
                     <thead class=" text-primary">
                     <tr>
                       <th>Opis</th>
-                      <th>Godina 2018</th>
-                      <th>Godina 2019</th>
-                      <th>Razlika</th>
-                      <th>Index</th>
+                      <th class="text-right">Godina 2018</th>
+                      <th class="text-right">Godina 2019</th>
+                      <th class="text-right">Razlika</th>
+                      <th class="text-right">Index</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr *ngFor="let item of pokazatelji2">
                       <td>{{item.opis}}</td>
-                      <td>{{(item.godina2018).toLocaleString("hr")}}</td>
-                      <td>{{(item.godina2019).toLocaleString("hr")}}</td>
-                      <td>{{(item.godina2019 - item.godina2018).toFixed(1).toLocaleString("hr") }}</td>
-                      <td>{{((item.godina2019 / item.godina2018) *100).toFixed(1).toLocaleString("hr")}}</td>
+                      <td class="text-right">{{(item.godina2018).toLocaleString("hr")}}</td>
+                      <td class="text-right">{{(item.godina2019).toLocaleString("hr")}}</td>
+                      <td class="text-right">{{(item.godina2019 - item.godina2018).toFixed(1).toLocaleString("hr").replace('.',',') }}</td>
+                      <td class="text-right">{{((item.godina2019 / item.godina2018) *100).toFixed(1).toLocaleString("hr").replace('.',',')}}</td>
                     </tr>
                     </tbody>
                   </table>
