@@ -375,7 +375,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
 
-    var gradientChartOptionsConfigurationWithTooltipBlue: any = {
+   /* var gradientChartOptionsConfigurationWithTooltipBlue: any = {
       maintainAspectRatio: false,
       legend: {
         display: false
@@ -665,7 +665,7 @@ export class DashboardComponent implements OnInit {
     };
 
 
-    /*chartLineRed*/
+    /!*chartLineRed*!/
 
 
     this.canvas = document.getElementById("chartLineRed");
@@ -706,7 +706,7 @@ export class DashboardComponent implements OnInit {
 
 
 
-    /*chartLineGreen*/
+    /!*chartLineGreen*!/
 
 
     this.canvas = document.getElementById("chartLineGreen");
@@ -757,7 +757,7 @@ export class DashboardComponent implements OnInit {
     ];
     this.data = this.datasets[0];
 
-    /*chartBig1*/
+    /!*chartBig1*!/
 
     this.canvas = document.getElementById("chartBig1");
     this.ctx = this.canvas.getContext("2d");
@@ -794,7 +794,7 @@ export class DashboardComponent implements OnInit {
     };
     this.myChartData = new Chart(this.ctx, config);
 
-    /*CountryChart*/
+    /!*CountryChart*!/
 
     this.canvas = document.getElementById("CountryChart");
     this.ctx  = this.canvas.getContext("2d");
@@ -826,7 +826,7 @@ export class DashboardComponent implements OnInit {
         }]
       },
       options: gradientBarChartConfiguration
-    });
+    });*/
 
   }
 
@@ -889,7 +889,7 @@ export class DashboardComponent implements OnInit {
       datasets: [
         {
           label: "2018",
-          backgroundColor: "blue",
+          backgroundColor: "#1f8ef1",
           data: [myLikivdnostiData[0], myLikivdnostiData[2], myLikivdnostiData[4], myLikivdnostiData[6]]
         },
         {
@@ -919,6 +919,11 @@ export class DashboardComponent implements OnInit {
         }
       }
     });
+    myChart.options.scales.yAxes[0].ticks.fontSize = 20 ;
+    myChart.options.scales.xAxes[0].ticks.fontSize = 20 ;
+
+    myChart.options.legend.labels.fontSize = 20 ;
+    myChart.update();
   }
 
   showEkonomicnostGraph(data: any, id: any) {
@@ -1002,6 +1007,12 @@ export class DashboardComponent implements OnInit {
       data: chartData,
       options: chartOptions
     });
+
+    lineChart.options.scales.yAxes[0].ticks.fontSize = 20 ;
+    lineChart.options.scales.xAxes[0].ticks.fontSize = 20 ;
+
+    lineChart.options.legend.labels.fontSize = 20 ;
+    lineChart.update();
   }
 
 
@@ -1031,7 +1042,7 @@ export class DashboardComponent implements OnInit {
       datasets: [
         {
           label: "2018",
-          backgroundColor: "blue",
+          backgroundColor: "#1f8ef1",
           data: [myLikivdnostiData[0], myLikivdnostiData[2], myLikivdnostiData[4]]
         },
         {
@@ -1061,6 +1072,12 @@ export class DashboardComponent implements OnInit {
         }
       }
     });
+
+    myChart.options.scales.yAxes[0].ticks.fontSize = 20 ;
+    myChart.options.scales.xAxes[0].ticks.fontSize = 20 ;
+
+    myChart.options.legend.labels.fontSize = 20 ;
+    myChart.update();
   }
 
 
@@ -1163,6 +1180,12 @@ export class DashboardComponent implements OnInit {
       data: chartData,
       options: chartOptions
     });
+
+    lineChart.options.scales.yAxes[0].ticks.fontSize = 20 ;
+    lineChart.options.scales.xAxes[0].ticks.fontSize = 20 ;
+
+    lineChart.options.legend.labels.fontSize = 20 ;
+    lineChart.update();
   }
 
 
@@ -1187,7 +1210,7 @@ export class DashboardComponent implements OnInit {
       datasets: [
         {
           label: "2018",
-          backgroundColor: "blue",
+          backgroundColor: "#1f8ef1",
           data: [myLikivdnostiData[0], myLikivdnostiData[2]]
         },
         {
@@ -1216,6 +1239,11 @@ export class DashboardComponent implements OnInit {
         }
       }
     });
+
+    myChart.options.scales.yAxes[0].ticks.fontSize = 20 ;
+    myChart.options.scales.xAxes[0].ticks.fontSize = 20 ;
+    myChart.options.legend.labels.fontSize = 20 ;
+    myChart.update();
   }
 
   public updateOptions() {
