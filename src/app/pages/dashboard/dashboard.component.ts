@@ -138,6 +138,13 @@ export class DashboardComponent implements OnInit {
 
   }
 
+  number_format(val: any, decimals: any){
+    //Parse the value as a float value
+    val = parseFloat(val);
+    //Format the value w/ the specified number
+    //of decimal places and return it.
+    return val.toFixed(decimals);
+  }
 
   onFileChange(event: any) {
     this.exceltoJson = {};
